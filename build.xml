@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<project name="gwoptics" basedir="." default="install">
+    <presetdef name="javac">
+        <javac includeantruntime="false" />
+    </presetdef>
+
+    <!-- jar include paths -->
+    <path id="jar.include">
+        <fileset dir="jar/p5" includes="core.jar" />
+    </path>
+    
+    <!-- clean -->
+    <target name="clean">
+        <delete dir="classes" failonerror="false" />
+        <delete dir="jar/gwoptics" failonerror="false" />
+        <delete dir="library" failonerror="false" />
+    </target>
+    
+    <!-- compile -->
+    <target name="compile">
+        <mkdir dir="classes" />
+        <javac srcdir="src" destdir="classes">
+            <compilerarg value="-Xlint:deprecation"/>
+            <classpath>
+                <path refid="jar.include" />
+            </classpath>
+        </javac>
+        <mkdir dir="classes/data" />
+        <copy todir="classes/data">
+            <fileset dir="src/data" />
+        </copy>
+    </target>
+    
+    <!-- jar -->
+    <target name="jar" depends="compile">
+        <mkdir dir="jar/gwoptics" />
+        <jar destfile="jar/gwoptics/gwoptics.jar" basedir="classes" />
+    </target>
+    
+    <!-- install -->
+    <target name="install" depends="jar">
+        <mkdir dir="library" />
+        <copy todir="library">
+            <fileset dir="jar/gwoptics" includes="gwoptics.jar" />
+        </copy>
+    </target>
+
+    <target name="help" />
+</project>
